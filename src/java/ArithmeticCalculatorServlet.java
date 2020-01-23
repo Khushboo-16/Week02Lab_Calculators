@@ -31,20 +31,49 @@ public class ArithmeticCalculatorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ArithmeticCalculatorServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ArithmeticCalculatorServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
+        String operator; 
+        String result = "---";
+        int firstValue;
+        int secondValue;
+        
+        operator = request.getParameter("operation");
+        
+        if(operator != null) {    
+            try {
+            firstValue = Integer.parseInt(request.getParameter("first"));
+            secondValue = Integer.parseInt(request.getParameter("second"));
+            //int output = 0;
+            
+                if (operator.equals("+")) {
+                    result = firstValue + secondValue + " ";
+                } else if (operator.equals("-")) {
+                    result = firstValue - secondValue + " ";
+                } else if (operator.equals("*")) {
+                    result = firstValue * secondValue + " ";
+                } else {
+                    result = firstValue / secondValue + " ";
+                }
+                request.setAttribute("first", firstValue);
+                request.setAttribute("second", secondValue);
+                request.setAttribute("result", result);
+            
+            }
+            catch (Exception e) {
+            result = "Invalid";
+            request.setAttribute("first", request.getParameter("first"));
+            request.setAttribute("second", request.getParameter("second"));
+            }      
+        }
+        else{
+            result = "---";
+        }
+       
+        request.setAttribute("result", result);
+        getServletContext().getRequestDispatcher("/arithmeticcalculator.jsp").forward(request, response);
+        
+    }   
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -83,5 +112,8 @@ public class ArithmeticCalculatorServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
 
 }
+
+
